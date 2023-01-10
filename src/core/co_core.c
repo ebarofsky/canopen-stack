@@ -29,7 +29,7 @@
 */
 void CONodeInit(CO_NODE *node, CO_NODE_SPEC *spec)
 {
-    int16_t num;
+    int16_t num, enableSuccess = -1;
     CO_ERR  err;
 
     node->If.Drv   = spec->Drv;
@@ -66,7 +66,12 @@ void CONodeInit(CO_NODE *node, CO_NODE_SPEC *spec)
         if (err != CO_ERR_NONE) {
             node->Error = CO_ERR_OBJ_INIT;
         }
-        COIfCanEnable(&node->If, node->Baudrate);
+
+        enableSuccess = COIfCanEnable(&node->If, true);
+        if(enableSuccess < 0)
+        {
+            node->Error = CO_ERR_CAN_AUTOBAUD;
+        }
     }
 }
 

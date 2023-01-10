@@ -14,30 +14,27 @@
    limitations under the License.
 ******************************************************************************/
 
+#ifndef CO_TIMER2_STM32F4XX_H_
+#define CO_TIMER2_STM32F4XX_H_
+
+#ifdef __cplusplus               /* for compatibility with C++ environments  */
+extern "C" {
+#endif
+
 /******************************************************************************
 * INCLUDES
 ******************************************************************************/
 
-#include "co_core.h"
+#include "co_if.h"
 
 /******************************************************************************
-* PUBLIC FUNCTIONS
+* PUBLIC SYMBOLS
 ******************************************************************************/
 
-/*
-* see function definition
-*/
-void COIfInit(CO_IF *cif, struct CO_NODE_T *node, uint32_t freq)
-{
-    const CO_IF_CAN_DRV   *can   = cif->Drv->Can;
-    const CO_IF_TIMER_DRV *timer = cif->Drv->Timer;
-//    const CO_IF_NVM_DRV   *nvm   = cif->Drv->Nvm;
+extern const CO_IF_TIMER_DRV STM32F4xx_TIM2_TimerDriver;
 
-    /* initialize interface structure */
-    cif->Node = node;
-
-    /* initialize hardware via drivers */
-//    nvm->Init();
-    timer->Init(freq);
-    can->Init();
+#ifdef __cplusplus               /* for compatibility with C++ environments  */
 }
+#endif
+
+#endif

@@ -189,7 +189,7 @@ typedef struct CO_IF_FRM_T {         /*!< Type, which represents a CAN frame */
 } CO_IF_FRM;
 
 typedef void    (*CO_IF_CAN_INIT_FUNC  )(void);
-typedef void    (*CO_IF_CAN_ENABLE_FUNC)(uint32_t);
+typedef int16_t (*CO_IF_CAN_ENABLE_FUNC)(uint8_t);
 typedef int16_t (*CO_IF_CAN_READ_FUNC  )(CO_IF_FRM *);
 typedef int16_t (*CO_IF_CAN_SEND_FUNC  )(CO_IF_FRM *);
 typedef void    (*CO_IF_CAN_RESET_FUNC )(void);
@@ -286,10 +286,11 @@ void COIfCanClose(struct CO_IF_T *cif);
 * \param cif
 *    pointer to the interface structure
 *
-* \param baudrate
-*    baudrate, if set to 0 the default baudrate is used
+* \param autobaudEnable
+*    auotmatic baudrate detect enable. If true then it will cycle though the
+*    baudrate table, if false the default baudrate will be used.
 */
-void COIfCanEnable(struct CO_IF_T *cif, uint32_t baudrate);
+int16_t COIfCanEnable(struct CO_IF_T *cif, uint8_t autobaudEnable);
 
 /******************************************************************************
 * CALLBACK FUNCTIONS

@@ -139,7 +139,10 @@ typedef enum CO_ERR_T {
     CO_ERR_TYPE_INIT,            /*!< error during type initialization       */
     CO_ERR_TYPE_RD,              /*!< error during reading type              */
     CO_ERR_TYPE_WR,              /*!< error during writing type              */
-    CO_ERR_TYPE_RESET            /*!< error during reset type                */
+    CO_ERR_TYPE_RESET,           /*!< error during reset type                */
+
+    // Custom added errors
+    CO_ERR_CAN_AUTOBAUD          /*!< error during CAN autobaudrate init/detect */
 
 } CO_ERR;
 

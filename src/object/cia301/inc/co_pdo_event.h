@@ -14,8 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-#ifndef CO_IF_H_
-#define CO_IF_H_
+#ifndef CO_PDO_EVENT_H_
+#define CO_PDO_EVENT_H_
 
 #ifdef __cplusplus               /* for compatibility with C++ environments  */
 extern "C" {
@@ -26,48 +26,29 @@ extern "C" {
 ******************************************************************************/
 
 #include "co_types.h"
-#include "co_if_can.h"
-#include "co_if_timer.h"
-//#include "co_if_nvm.h"
+#include "co_err.h"
+#include "co_obj.h"
+#include "co_pdo.h"
 
 /******************************************************************************
-* PUBLIC TYPES
+* DEFINES
 ******************************************************************************/
 
-struct CO_NODE_T;              /* Declaration of canopen node structure      */
-
-typedef struct CO_IF_DRV_T {         /*!< Type, which links driver functions */
-    const CO_IF_CAN_DRV    *Can;     /*!< Link to CAN driver functions       */
-    const CO_IF_TIMER_DRV  *Timer;   /*!< Link to Timer driver functions     */
-//    const CO_IF_NVM_DRV    *Nvm;     /*!< Link to NVM driver functions       */
-} CO_IF_DRV;
-
-typedef struct CO_IF_T {          /*!< Driver interface structure            */
-    struct CO_NODE_T *Node;       /*!< Link to parent node                   */
-    CO_IF_DRV        *Drv;        /*!< Link to hardware driver functions     */
-} CO_IF;
+#define CO_TPDO_EVENT  ((const CO_OBJ_TYPE *)&COTPdoEvent)
 
 /******************************************************************************
-* PUBLIC FUNCTIONS
+* PUBLIC CONSTANTS
 ******************************************************************************/
 
-/*! \brief  INITIALIZE INTERFACES
+/*! \brief OBJECT TYPE: TRANSMIT PDO EVENT TIMER
 *
-*    This function initialize all hardware interfaces.
-*
-* \param cif
-*    pointer to the interface structure
-*
-* \param node
-*    pointer to the parent node
-*
-* \param freq
-*    timer clock frequency
+*    This object type specializes the general handling of the event timer
+*    object within the TPDO communication profile.
 */
-void COIfInit(CO_IF *cif, struct CO_NODE_T *node, uint32_t freq);
+extern const CO_OBJ_TYPE COTPdoEvent;       /*!< PDO Event Type              */
 
 #ifdef __cplusplus               /* for compatibility with C++ environments  */
 }
 #endif
 
-#endif /* CO_IF_H_ */
+#endif  /* #ifndef CO_PDO_EVENT_H_ */

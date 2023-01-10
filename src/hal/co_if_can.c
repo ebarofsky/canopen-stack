@@ -85,15 +85,18 @@ void COIfCanClose(CO_IF *cif)
 /*
 * see function definition
 */
-void COIfCanEnable(CO_IF *cif, uint32_t baudrate)
+int16_t COIfCanEnable(CO_IF *cif, uint8_t autobaudEnable)
 {
     const CO_IF_CAN_DRV *can = cif->Drv->Can;
+    uint32_t baudrate = 0;
+//    int8_t autobaudValid = -1;
 
-    if (baudrate == (uint32_t)0) {
+    if (autobaudEnable == false) {
     	baudrate = cif->Node->Baudrate;
-    } else {
-      	cif->Node->Baudrate = baudrate;
     }
+//    else {
+//      	cif->Node->Baudrate = baudrate;
+//    }
 
-    can->Enable(baudrate);
+    return(can->Enable(baudrate));
 }

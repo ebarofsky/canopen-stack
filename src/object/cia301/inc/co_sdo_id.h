@@ -14,8 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
-#ifndef CO_IF_H_
-#define CO_IF_H_
+#ifndef CO_SDO_ID_H_
+#define CO_SDO_ID_H_
 
 #ifdef __cplusplus               /* for compatibility with C++ environments  */
 extern "C" {
@@ -26,48 +26,55 @@ extern "C" {
 ******************************************************************************/
 
 #include "co_types.h"
-#include "co_if_can.h"
-#include "co_if_timer.h"
-//#include "co_if_nvm.h"
+#include "co_err.h"
+#include "co_obj.h"
+#include "co_sync.h"
 
 /******************************************************************************
-* PUBLIC TYPES
+* PUBLIC DEFINES
 ******************************************************************************/
 
-struct CO_NODE_T;              /* Declaration of canopen node structure      */
-
-typedef struct CO_IF_DRV_T {         /*!< Type, which links driver functions */
-    const CO_IF_CAN_DRV    *Can;     /*!< Link to CAN driver functions       */
-    const CO_IF_TIMER_DRV  *Timer;   /*!< Link to Timer driver functions     */
-//    const CO_IF_NVM_DRV    *Nvm;     /*!< Link to NVM driver functions       */
-} CO_IF_DRV;
-
-typedef struct CO_IF_T {          /*!< Driver interface structure            */
-    struct CO_NODE_T *Node;       /*!< Link to parent node                   */
-    CO_IF_DRV        *Drv;        /*!< Link to hardware driver functions     */
-} CO_IF;
+#define CO_TSDO_ID  ((const CO_OBJ_TYPE *)&COTSdoId)
 
 /******************************************************************************
-* PUBLIC FUNCTIONS
+* PUBLIC CONSTANTS
 ******************************************************************************/
 
-/*! \brief  INITIALIZE INTERFACES
+/*! \brief OBJECT TYPE SDO IDENTIFIER
 *
-*    This function initialize all hardware interfaces.
-*
-* \param cif
-*    pointer to the interface structure
-*
-* \param node
-*    pointer to the parent node
-*
-* \param freq
-*    timer clock frequency
+*    This object type specializes the general handling of objects for the
+*    object dictionary entries holding a SDO identifier. These entries are
+*    designed to provide the feature of changing a SDO identifier.
 */
-void COIfInit(CO_IF *cif, struct CO_NODE_T *node, uint32_t freq);
+extern const CO_OBJ_TYPE COTSdoId;
+
+/******************************************************************************
+* PROTECTED HELBER FUNCTIONS
+******************************************************************************/
+
+/*! \brief ACTIVATE SYNC PRODUCER
+*
+*    This function is used to activate SYNC producer functionality.
+*    It's called on NMT Start Pre-Operational or sync COB-ID update
+*    (1005h) with bit 30 set to 1.
+*
+* \param sync
+*    Pointer to SYNC object
+*/
+void COSyncProdActivate(CO_SYNC *sync);
+
+/*! \brief ACTIVATE SYNC PRODUCER
+*
+*    This function is used to deactivate SYNC producer functionality.
+*    It's called on sync COB-ID update (1005h) with bit 30 set to 0.
+*
+* \param sync
+*    Pointer to SYNC object
+*/
+void COSyncProdDeactivate(CO_SYNC *sync);
 
 #ifdef __cplusplus               /* for compatibility with C++ environments  */
 }
 #endif
 
-#endif /* CO_IF_H_ */
+#endif  /* #ifndef CO_SDO_ID_H_ */
