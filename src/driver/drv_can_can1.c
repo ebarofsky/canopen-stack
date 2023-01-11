@@ -19,7 +19,7 @@
 ******************************************************************************/
 
 #include "drv_can_can1.h"
-#include "stm32f4xx_hal.h"
+#include "stm32f3xx_hal.h"
 
 /******************************************************************************
 * PRIVATE TYPE DEFINITION
@@ -55,25 +55,26 @@ extern void MX_CAN1_Init(void);
 ******************************************************************************/
 
 static PIN_ASSIGN Can1Pin_Rx[] = {
-    { GPIOA, GPIO_PIN_11, GPIO_AF9_CAN1 },  /* #0: PA11 */
-    { GPIOB, GPIO_PIN_8,  GPIO_AF9_CAN1 },  /* #1: PB8  */
-    { GPIOD, GPIO_PIN_0,  GPIO_AF9_CAN1 },  /* #3: PD0  */
-    { GPIOH, GPIO_PIN_14, GPIO_AF9_CAN1 },  /* #4: PH14 */
+    { GPIOA, GPIO_PIN_11, GPIO_AF9_CAN },  /* #0: PA11 */
+//    { GPIOB, GPIO_PIN_8,  GPIO_AF9_CAN1 },  /* #1: PB8  */
+//    { GPIOD, GPIO_PIN_0,  GPIO_AF9_CAN1 },  /* #3: PD0  */
+//    { GPIOH, GPIO_PIN_14, GPIO_AF9_CAN1 },  /* #4: PH14 */
 };
 static PIN_ASSIGN Can1Pin_Tx[] = {
-    { GPIOA, GPIO_PIN_12, GPIO_AF9_CAN1 },  /* #0: PA12 */
-    { GPIOB, GPIO_PIN_9,  GPIO_AF9_CAN1 },  /* #1: PB9  */
-    { GPIOD, GPIO_PIN_1,  GPIO_AF9_CAN1 },  /* #2: PD1  */
-    { GPIOH, GPIO_PIN_13, GPIO_AF9_CAN1 }   /* #3: PH13 */
+    { GPIOA, GPIO_PIN_12, GPIO_AF9_CAN },  /* #0: PA12 */
+//    { GPIOB, GPIO_PIN_9,  GPIO_AF9_CAN1 },  /* #1: PB9  */
+//    { GPIOD, GPIO_PIN_1,  GPIO_AF9_CAN1 },  /* #2: PD1  */
+//    { GPIOH, GPIO_PIN_13, GPIO_AF9_CAN1 }   /* #3: PH13 */
 };
 
+#warning "Did you make the baudrate table specificially for this processor? You sure? Like 100% sure?"
 static BAUDRATE_TBL BaudrateTbl[] = {
 //    {   10000, 250, CAN_SJW_1TQ, CAN_BS1_15TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
 //    {   20000, 125, CAN_SJW_1TQ, CAN_BS1_15TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
 //    {   50000,  60, CAN_SJW_1TQ, CAN_BS1_15TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
-    {  500000,   4, CAN_SJW_1TQ, CAN_BS1_15TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
-    {  125000,  18, CAN_SJW_1TQ, CAN_BS1_13TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
-    {  250000,   9, CAN_SJW_1TQ, CAN_BS1_13TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
+    {  500000,   9, CAN_SJW_1TQ, CAN_BS1_13TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
+    {  125000,  16, CAN_SJW_1TQ, CAN_BS1_13TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
+    {  250000,  16, CAN_SJW_1TQ, CAN_BS1_13TQ, CAN_BS2_2TQ },  /* SP: 88,9%, ERR:     0% */
 
 //    {  800000,   3, CAN_SJW_1TQ, CAN_BS1_12TQ, CAN_BS2_3TQ },  /* SP: 84,2%, ERR: -1,32% */
 //    { 1000000,   2, CAN_SJW_1TQ, CAN_BS1_15TQ, CAN_BS2_2TQ },  /* SP: 86,7%, ERR:     0% */
@@ -179,7 +180,7 @@ static int16_t DrvCanEnable(uint32_t baudrate)
     while (BaudrateTbl[idx].Baudrate != 0)
     {
         /* can controller mode */
-        DrvCan1.Instance  = CAN1;
+        DrvCan1.Instance  = CAN;
         DrvCan1.Init.Mode = CAN_MODE_SILENT;
 
         /* baudrate settings */
