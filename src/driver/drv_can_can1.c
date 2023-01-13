@@ -153,105 +153,108 @@ static void DrvCanInit(void)
 
 static int16_t DrvCanEnable(uint32_t baudrate)
 {
-    uint8_t idx = 0, timeoutCount = 0, lastCount = 0, baudFound = false;
-    HAL_StatusTypeDef err, lastVal = HAL_ERROR;
-    CAN_RxHeaderTypeDef frmHead;
-    uint8_t frmData[8] = { 0 };
-
-    //TODO: add in function to have this not be autobaud if desired
-//    if(baudrate > 0)
-//    {
-//        /* find the given baudrate in baudrate table */
-//        while (BaudrateTbl[idx].Baudrate != 0)
-//        {
-//            if (baudrate == BaudrateTbl[idx].Baudrate) {
-//                break;
-//            }
-//            idx++;
+	/*
+	 * This is taken care of by the autogeneratde
+	 */
+//    uint8_t idx = 0, timeoutCount = 0, lastCount = 0, baudFound = false;
+//    HAL_StatusTypeDef err, lastVal = HAL_ERROR;
+//    CAN_RxHeaderTypeDef frmHead;
+//    uint8_t frmData[8] = { 0 };
 //
-//            if (baudrate != BaudrateTbl[idx].Baudrate) {
-//                while(1);    /* error not handled */
+//    //TODO: add in function to have this not be autobaud if desired
+////    if(baudrate > 0)
+////    {
+////        /* find the given baudrate in baudrate table */
+////        while (BaudrateTbl[idx].Baudrate != 0)
+////        {
+////            if (baudrate == BaudrateTbl[idx].Baudrate) {
+////                break;
+////            }
+////            idx++;
+////
+////            if (baudrate != BaudrateTbl[idx].Baudrate) {
+////                while(1);    /* error not handled */
+////            }
+////        }
+////    }
+////    else
+////    {
+//
+//    while (BaudrateTbl[idx].Baudrate != 0)
+//    {
+//        /* can controller mode */
+//        DrvCan1.Instance  = CAN;
+//        DrvCan1.Init.Mode = CAN_MODE_SILENT;
+//
+//        /* baudrate settings */
+//        DrvCan1.Init.Prescaler     = BaudrateTbl[idx].Prescaler;
+//        DrvCan1.Init.SyncJumpWidth = BaudrateTbl[idx].SyncJumpWidth;
+//        DrvCan1.Init.TimeSeg1      = BaudrateTbl[idx].TimeSeg1;
+//        DrvCan1.Init.TimeSeg2      = BaudrateTbl[idx].TimeSeg2;
+//
+//        /* feature select */
+//        DrvCan1.Init.TimeTriggeredMode    = DISABLE;
+//        DrvCan1.Init.AutoBusOff           = DISABLE;
+//        DrvCan1.Init.AutoWakeUp           = DISABLE;
+//        DrvCan1.Init.AutoRetransmission   = DISABLE;
+//        DrvCan1.Init.ReceiveFifoLocked    = DISABLE;
+//        DrvCan1.Init.TransmitFifoPriority = DISABLE;
+//
+//        HAL_CAN_Init(&DrvCan1);
+//        HAL_CAN_Start(&DrvCan1);
+//
+//        //2s timeout per bitrate
+//        while(timeoutCount < 200)
+//        {
+//            //If we have received any messages
+//            if(CANRxCount > 0)
+//            {
+//                // If we have a fresh message
+//                if(lastCount != CANRxCount)
+//                {
+//                    err = HAL_CAN_GetRxMessage(&DrvCan1, CAN_RX_FIFO0, &frmHead, &frmData[0]);
+//                    if (err == HAL_OK)
+//                    {
+//                        if(DrvCan1.ErrorCode == HAL_CAN_ERROR_NONE)
+//                        {
+//                            //Found the baudrate with no error code
+//                            baudFound = true;
+//                            break;
+//                        }
+//                    }
+//                    lastCount = CANRxCount;
+//                }
 //            }
+//            HAL_Delay(10);
+//            timeoutCount++;
 //        }
+//
+//        if(baudFound == false)
+//        {
+//            idx++;
+//        }
+//        else
+//        {
+//            break;
+//        }
+//    }
+//
+//    if(BaudrateTbl[idx].Baudrate != 0)
+//    {
+//        HAL_CAN_DeInit(&DrvCan1);
+//
+//        DrvCan1.Init.Mode = CAN_MODE_NORMAL;
+//
+//        HAL_CAN_Init(&DrvCan1);
+//        HAL_CAN_Start(&DrvCan1);
+//
+//        return(0);
 //    }
 //    else
 //    {
-
-    while (BaudrateTbl[idx].Baudrate != 0)
-    {
-        /* can controller mode */
-        DrvCan1.Instance  = CAN;
-        DrvCan1.Init.Mode = CAN_MODE_SILENT;
-
-        /* baudrate settings */
-        DrvCan1.Init.Prescaler     = BaudrateTbl[idx].Prescaler;
-        DrvCan1.Init.SyncJumpWidth = BaudrateTbl[idx].SyncJumpWidth;
-        DrvCan1.Init.TimeSeg1      = BaudrateTbl[idx].TimeSeg1;
-        DrvCan1.Init.TimeSeg2      = BaudrateTbl[idx].TimeSeg2;
-
-        /* feature select */
-        DrvCan1.Init.TimeTriggeredMode    = DISABLE;
-        DrvCan1.Init.AutoBusOff           = DISABLE;
-        DrvCan1.Init.AutoWakeUp           = DISABLE;
-        DrvCan1.Init.AutoRetransmission   = DISABLE;
-        DrvCan1.Init.ReceiveFifoLocked    = DISABLE;
-        DrvCan1.Init.TransmitFifoPriority = DISABLE;
-
-        HAL_CAN_Init(&DrvCan1);
-        HAL_CAN_Start(&DrvCan1);
-
-        //2s timeout per bitrate
-        while(timeoutCount < 200)
-        {
-            //If we have received any messages
-            if(CANRxCount > 0)
-            {
-                // If we have a fresh message
-                if(lastCount != CANRxCount)
-                {
-                    err = HAL_CAN_GetRxMessage(&DrvCan1, CAN_RX_FIFO0, &frmHead, &frmData[0]);
-                    if (err == HAL_OK)
-                    {
-                        if(DrvCan1.ErrorCode == HAL_CAN_ERROR_NONE)
-                        {
-                            //Found the baudrate with no error code
-                            baudFound = true;
-                            break;
-                        }
-                    }
-                    lastCount = CANRxCount;
-                }
-            }
-            HAL_Delay(10);
-            timeoutCount++;
-        }
-
-        if(baudFound == false)
-        {
-            idx++;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    if(BaudrateTbl[idx].Baudrate != 0)
-    {
-        HAL_CAN_DeInit(&DrvCan1);
-
-        DrvCan1.Init.Mode = CAN_MODE_NORMAL;
-
-        HAL_CAN_Init(&DrvCan1);
-        HAL_CAN_Start(&DrvCan1);
-
-        return(0);
-    }
-    else
-    {
-        return(-1);
-    }
+//        return(-1);
 //    }
+////    }
 }
 
 static int16_t DrvCanSend(CO_IF_FRM *frm)
